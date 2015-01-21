@@ -46,7 +46,7 @@ angular.module 'supActions', []
 ]
 
 # focus
-.directive "supFocus", [
+.directive "focus", [
   '$timeout'
   (
     $timeout

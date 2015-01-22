@@ -12,13 +12,16 @@ Version 1.0.0
 
 (function supAnalytics() {
   'use strict';
-  var API_HOST = 'http://api.soopro.com/'
+  
   if(!window['sa']){
       return;
   }
-
-  var xmlhttp;
-  var api=window['sa_api']+'ws/'+window['sa']+'/visit';
+  var sa, xmlhttp;
+  sa = window['sa']
+  if(!sa.id || !sa.api){
+    return;
+  }
+  var api=sa.api+'/ws/'+sa.id+'/visit';
 
   if (window.XMLHttpRequest) {
       // code for IE7+, Firefox, Chrome, Opera, Safari

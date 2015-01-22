@@ -17,6 +17,7 @@ Version 1.0.0
       return;
   }
   var sa, xmlhttp;
+  
   sa = window['sa']
   if(!sa.id || !sa.api){
     return;

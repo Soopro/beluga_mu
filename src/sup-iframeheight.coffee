@@ -29,21 +29,23 @@
 
 root = window
 
-if window.self is window.top or window.self is window.parent
-  return
-
 unless root.sup
   root.sup = {}
 
-root.sup.postFrameHeight = ->
-  window.parent.postMessage(document.body.offsetHeight,'*');
+init = ->
+  console.log "*** Start post frame height. ***"
+  root.sup.postFrameHeight = ->
+    window.parent.postMessage(document.body.offsetHeight,'*');
 
-if window.parent and window.parent.postMessage
-  interval = setInterval ->
-    root.sup.postFrameHeight()
-    return
-  , 100
+  if window.parent and window.parent.postMessage
+    interval = setInterval ->
+      root.sup.postFrameHeight()
+      return
+    , 100
 
-window.addEventListener "DOMContentLoaded", root.sup.postFrameHeight
-window.addEventListener "resize", root.sup.postFrameHeight
-window.addEventListener "load", root.sup.postFrameHeight
+  window.addEventListener "DOMContentLoaded", root.sup.postFrameHeight
+  window.addEventListener "resize", root.sup.postFrameHeight
+  window.addEventListener "load", root.sup.postFrameHeight
+
+if window.self isnt window.top and window.self isnt window.parent
+  init()

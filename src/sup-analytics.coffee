@@ -19,7 +19,7 @@ supAnalytics = ->
   sa = window['sa']
   if !sa.id or !sa.api
     return
-  api = sa.api + '/app/' + sa.id + '/visit'
+  api = sa.api + '/app/' + sa.app + '/visit/'+sa.id
   if window.XMLHttpRequest
     # code for IE7+, Firefox, Chrome, Opera, Safari
     xmlhttp = new XMLHttpRequest

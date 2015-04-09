@@ -17,7 +17,7 @@ supAnalytics = ->
   sa = undefined
   xmlhttp = undefined
   sa = window['sa']
-  if !sa.id or !sa.api
+  if not sa.id or not sa.api or not sa.app
     return
   api = sa.api + '/app/' + sa.app + '/visit/'+sa.id
   if window.XMLHttpRequest

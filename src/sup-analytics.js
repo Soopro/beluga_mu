@@ -22,7 +22,7 @@ Version 1.0.0
   if(!sa.id || !sa.api){
     return;
   }
-  var api=sa.api+'/ws/'+sa.id+'/visit';
+  var api=sa.api+'/analytics/'+sa.id+'/visit';
 
   if (window.XMLHttpRequest) {
       // code for IE7+, Firefox, Chrome, Opera, Safari

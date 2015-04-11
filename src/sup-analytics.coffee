@@ -17,6 +17,7 @@ supAnalytics = ->
   sa = undefined
   xmlhttp = undefined
   sa = window['sa']
+  console.log sa
   if not sa.id or not sa.api or not sa.app
     return
   api = sa.api + '/app/' + sa.app + '/visit/'+sa.id
@@ -28,4 +29,4 @@ supAnalytics = ->
     xmlhttp = new ActiveXObject('Microsoft.XMLHTTP')
   xmlhttp.open 'GET', api, true
   xmlhttp.send()
-  return
+  console.log api

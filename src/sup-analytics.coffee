@@ -10,7 +10,7 @@ Version 1.0.0
 	load on front page.
 ###
 
-supAnalytics = ->
+supAnalytics = do ->
   'use strict'
   if !window['sa']
     return

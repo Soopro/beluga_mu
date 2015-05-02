@@ -43,8 +43,8 @@ root.sup.translate = (text) ->
   args=[]
   for arg in arguments
     args.push arg
-  args = args[1..]  
-  for arg in args
+
+  for arg in args[1..]
     trans = trans.replace("%s", arg)
 
   return trans

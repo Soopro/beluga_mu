@@ -10,6 +10,8 @@ unless root.sup
 root.sup.locale = null
 root.sup.localizedDict = {}
 root.sup.localizedText = {}
+root.sup.case_sensitive = false
+
 
 root.sup.setLocale = (loc) ->
   locale = null
@@ -29,14 +31,18 @@ root.sup.setLocale = (loc) ->
   root.sup.locale = locale
   return root.sup.locale
 
-
+root.sup.case = (str)->
+  if root.sup.case_sensitive
+    return str.toLowerCase()
+  return str
+    
 root.sup.translate = (text) ->
   if typeof text isnt 'string'
     return text
   
   trans = text
   for t in root.sup.localizedText
-    if t.msgid is text
+    if root.sup.case(t.msgid) is root.sup.case(text)
       trans = t.msgstr 
       break
   
@@ -75,7 +81,7 @@ angular.module 'supLocale', ['ngCookies']
     default_locale = 'en_US'
     self = @
     
-    @init = (loc)->
+    @init = (loc, case_sensitive)->
       if loc
         default_locale = loc
       userLang = navigator.language or navigator.userLanguage
@@ -87,6 +93,8 @@ angular.module 'supLocale', ['ngCookies']
     
       currLocale = if cookieLocale then cookieLocale else userLocale
       self.set currLocale
+      if case_sensitive
+        sup.case_sensitive = true
       $rootScope._ = sup.translate
 
     @set = (loc) ->

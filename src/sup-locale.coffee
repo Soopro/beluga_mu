@@ -39,7 +39,7 @@ root.sup.case = (str)->
 root.sup.translate = (text) ->
   if typeof text isnt 'string'
     return text
-  
+
   trans = text
   for t in root.sup.localizedText
     if root.sup.case(t.msgid) is root.sup.case(text)
@@ -95,8 +95,11 @@ angular.module 'supLocale', ['ngCookies']
       self.set currLocale
       if case_sensitive
         sup.case_sensitive = true
-      $rootScope._ = sup.translate
-
+      $rootScope._ = angular.translate = sup.translate
+    
+    @translate = (args)->
+      return sup.translate.apply(this, arguments)
+    
     @set = (loc) ->
       locale = sup.setLocale loc
       locale = locale or default_locale

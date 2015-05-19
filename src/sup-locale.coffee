@@ -113,6 +113,11 @@ angular.module 'supLocale', ['ngCookies']
       catch e
         cookieLocale = null
       return cookieLocale
-
+    
+    @match = (lang1, lang2)->
+      lang1 = lang1.replace('-','_')
+      lang2 = lang2.replace('-','_')
+      return lang1.toLowerCase() == lang2.toLowerCase()
+    
     return  @
 ]

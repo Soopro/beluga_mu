@@ -32,7 +32,7 @@ root.sup.setLocale = (loc) ->
   return root.sup.locale
 
 root.sup.case = (str)->
-  if root.sup.case_sensitive
+  if not root.sup.case_sensitive
     return str.toLowerCase()
   return str
     

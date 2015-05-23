@@ -51,6 +51,7 @@ root.sup.translate = (text) ->
     args.push arg
 
   for arg in args[1..]
+    arg = '' if arg is undefined
     trans = trans.replace("%s", arg)
 
   return trans

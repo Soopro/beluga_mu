@@ -25,7 +25,7 @@
 
   supDotdotdot.directive('dotdotdot', function () {
     return {
-      priority: 999,
+      priority: 9999,
       scope: {
         suffix: '@',
         sticky: '@'

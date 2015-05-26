@@ -23,8 +23,9 @@
 
   var supDotdotdot = angular.module('supDotdotdot', []);
 
-  supDotdotdot.directive('supDotdotdot', function () {
+  supDotdotdot.directive('dotdotdot', function () {
     return {
+      priority: 999,
       scope: {
         suffix: '@',
         sticky: '@'
@@ -44,7 +45,10 @@
         if (!suffix) {
           suffix = '...';
         }
-
+        if (sticky) {
+          suffix = ' ' + suffix;
+        }
+        
         overflow = function (html) {
           var dif = html.scrollHeight - html.offsetHeight;
           return dif !== 0;
@@ -52,9 +56,7 @@
 
         addSuffix = function () {
           var p_suffix = suffix;
-          if (sticky) {
-            p_suffix = ' ' + suffix;
-          }
+          
           var container_backup = container.innerHTML;
           temp = container.innerHTML.slice(0,
               container.innerHTML.length - p_suffix.length);

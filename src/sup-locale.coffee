@@ -1,19 +1,36 @@
 # -------------------------------
 # sup Localized
 # -------------------------------
+
 is_exports = typeof exports isnt "undefined" and exports isnt null
 root = if is_exports then exports else this
 
 unless root.sup
   root.sup = {}
 
-root.sup.locale = null
-root.sup.localizedDict = {}
-root.sup.localizedText = {}
-root.sup.case_sensitive = false
+# make it global, easy load localize by other js files.
+sup.localizedDict = {}
+
+localizedText = {}
+locale = null
+CASE_SENSITIVE = false
 
 
-root.sup.setLocale = (loc) ->
+low = (str)->
+  if not CASE_SENSITIVE
+    return str.toLowerCase()
+  return str
+
+load = (loc_text_list)->
+  if not (loc_text_list instanceof Array)
+    return {}
+  loc_text_dict = {}
+  for text in loc_text_list
+    if text.msgid and text.msgstr
+      loc_text_dict[low(text.msgid)] = text.msgstr
+  return loc_text_dict
+
+setLocale = (loc) ->
   locale = null
   loc = loc.replace('-','_')
 
@@ -22,29 +39,23 @@ root.sup.setLocale = (loc) ->
       locale = k
       break
   
-  if locale and root.sup.localizedDict[locale]
-    locale_dict = root.sup.localizedDict[locale]
+  if locale and sup.localizedDict[locale]
+    locale_dict = sup.localizedDict[locale]
   else
     locale_dict = null
   
-  root.sup.localizedText = if locale_dict then locale_dict else {}
-  root.sup.locale = locale
-  return root.sup.locale
+  localizedText = load(locale_dict)
+  locale = locale
+  return locale
 
-root.sup.case = (str)->
-  if not root.sup.case_sensitive
-    return str.toLowerCase()
-  return str
     
-root.sup.translate = (text) ->
+translate = (text) ->
   if typeof text isnt 'string'
     return text
 
-  trans = text
-  for t in root.sup.localizedText
-    if root.sup.case(t.msgid) is root.sup.case(text)
-      trans = t.msgstr 
-      break
+  trans = localizedText[low(text)]
+  if not trans
+    trans = text
   
   args=[]
   for arg in arguments
@@ -61,12 +72,8 @@ root.sup.translate = (text) ->
 angular.module 'supLocale', ['ngCookies']
 
 .run [
-  '$rootScope'
-  '$cookieStore'
   'supLocale'
   (
-    $rootScope
-    $cookieStore
     supLocale
   ) ->
     supLocale.init()
@@ -83,30 +90,31 @@ angular.module 'supLocale', ['ngCookies']
     self = @
     
     @init = (loc, case_sensitive)->
+      CASE_SENSITIVE = Boolean(case_sensitive)
+      
       if loc
         default_locale = loc
+      
       userLang = navigator.language or navigator.userLanguage
       userLocale = userLang.replace('-','_')
       try
-        cookieLocale = $cookieStore.get 'current_locale'
+        cookieLocale = $cookieStore.get('current_locale')
       catch e
         cookieLocale = null
     
       currLocale = if cookieLocale then cookieLocale else userLocale
-      self.set currLocale
-      if case_sensitive
-        sup.case_sensitive = true
-      $rootScope._ = angular.translate = sup.translate
+      self.set(currLocale)
+      $rootScope._ = angular.translate = translate
     
     @translate = (args)->
-      return sup.translate.apply(this, arguments)
+      return translate.apply(this, arguments)
     
     @set = (loc) ->
-      locale = sup.setLocale loc
+      locale = setLocale(loc)
       locale = locale or default_locale
       $rootScope.locale = locale
       $rootScope.lang = locale.split('_')[0] or 'en'
-      $cookieStore.put 'current_locale', locale
+      $cookieStore.put('current_locale', locale)
       
     @get = ->
       try

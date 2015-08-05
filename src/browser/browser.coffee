@@ -73,7 +73,7 @@ root.sup.browser = browser
 if not document.querySelector('[modern-browser]')
   return
 
-if not not is_modern_browser
+if not is_modern_browser
   body = document.body
   return if not body
   

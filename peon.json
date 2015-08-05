@@ -1,13 +1,9 @@
 {
   "release":{
-    "shell":[
-      "harp compile src release"
-    ],
-    "rev":{
-      "src":"/*.html",
-      "cwd":"release/",
-      "find":"?md5=null",
-      "pattern":"null"
+    "clean": "dist",
+    "render":{
+      "cwd": "src",
+      "dest": "dist"
     }
   }
 }

@@ -7,6 +7,13 @@ Author:   redy
 Date:     28 April 2015
 Version:  1.5.1-beta.2
 ----------------------------------------------- */
+.transform(@arguments){
+  -webkit-transform: @arguments;
+     -moz-transform: @arguments;
+      -ms-transform: @arguments;
+       -o-transform: @arguments;
+          transform: @arguments;
+}
 
 
 /* RESET
@@ -82,6 +89,10 @@ p {
   margin-bottom: 1em;
 	font-weight: 400;
 }
+img {
+  .transform(translate3d(0, 0, 0));
+}
+
 
 #wrapper {
   margin: 16px auto;
@@ -113,9 +124,10 @@ p {
   padding: 8px;
   width: 20%;
 	text-decoration: none !important;
+  text-align: center;
   & img {
     display: block;
-    max-width: 99.9%;
+    max-width: 99%;
     height: auto;
   }
 }

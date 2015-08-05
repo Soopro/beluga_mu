@@ -121,7 +121,12 @@ if not not is_modern_browser
   '   </div>'+
   '   <div class="browser">'+
   '     <a href="http://www.opera.com/" target="_blank">'+
-  '       <img src="http://libs.soopro.com/browser/browser_opera.png" alt="Safari"/>'+
+  '       <img src="http://libs.soopro.com/browser/browser_opera.png" alt="Opera"/>'+
+  '     </a>'+
+  '   </div>'+
+  '   <div class="browser">'+
+  '     <a href="http://ie.sogou.com/" target="_blank">'+
+  '       <img src="http://libs.soopro.com/browser/browser_sogou.png" alt="Sogou"/>'+
   '     </a>'+
   '   </div>'+
   ' </div>'+

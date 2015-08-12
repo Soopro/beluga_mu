@@ -1,0 +1,52 @@
+/*
+-----------------------------------------------
+Soopro front door
+----------------------------------------------- */
+
+/* Base
+----------------------------------------------- */
+html,
+body {
+  font-family: RobotoDraft, Roboto,
+               'Hiragino Sans GB', STHeiti, 'Microsoft YaHei', 
+               'Helvetica Neue', sans-serif;
+  
+}
+.terms {
+  padding: 32px;
+  max-width: 768px;
+  margin: 0 auto;
+}
+.hl {
+  color: #7EAD64;
+}
+
+h1 {
+  font-size: 32px;
+  line-height: 1.2;
+}
+h2 {
+  font-size: 24px;
+  line-height: 1.3;
+}
+h3 {
+  font-size: 20px;
+  line-height: 1.4;
+}
+h4 {
+  font-size: 18px;
+  line-height: 1.4;
+}
+p {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+ul {
+  list-style-type: circle;
+}
+
+li {
+  font-size: 12px;
+  padding-bottom: 14px;
+}

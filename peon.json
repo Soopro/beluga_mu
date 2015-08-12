@@ -1,9 +1,9 @@
 {
   "release":{
-    "clean": "dist",
     "render":{
       "cwd": "src",
-      "dest": "dist"
+      "dest": "dist",
+      "clean": true,
     }
   }
 }

@@ -214,15 +214,13 @@
     return inited = true;
   };
 
-  if (document.addEventListener) {
+  if (document.readyState === "complete" || document.readyState === "loaded") {
+    init();
+  } else if (document.addEventListener) {
     document.addEventListener('DOMContentLoaded', function() {
       document.removeEventListener('DOMContentLoaded', arguments.callee, false);
       return init();
     }, false);
-  }
-
-  if (document.readyState === "complete" || document.readyState === "loaded") {
-    console.log("COOL");
   }
 
 }).call(this);

@@ -65,7 +65,9 @@ if browser.alias is 'MSIE' and parseInt(browser.ver) < 10
 if navigator.userAgent.indexOf('Mobile') > -1
   is_modern_browser = true
 
-console.log 'Detect browser: ', browser, is_modern_browser
+browser.is_modern_browser = is_modern_browser
+
+console.log 'Detect browser: ', browser
 
 # make it global, pass to other frameworks.
 root.sup.browser = browser

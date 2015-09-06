@@ -29,8 +29,22 @@ load = (loc_text_list)->
     if text.msgid and text.msgstr
       loc_text_dict[low(text.msgid)] = text.msgstr
   return loc_text_dict
+  
+append = (new_text_list)->
+  if not  (new_text_list instanceof Array)
+    return
+  for text in new_text_list
+    if text.msgid and text.msgstr
+       localizedText[low(text.msgid)] = text.msgstr
+  return
+
+restore = ->
+  setLocale(locale)
+  return
 
 setLocale = (loc) ->
+  if not loc
+    loc = ''
   locale = null
   loc = loc.replace('-','_')
 
@@ -45,7 +59,6 @@ setLocale = (loc) ->
     locale_dict = null
   
   localizedText = load(locale_dict)
-  locale = locale
   return locale
 
     
@@ -66,67 +79,97 @@ translate = (text) ->
     trans = trans.replace("%s", arg)
 
   return trans
-  
+ 
+self_translate = (text)->
+  if typeof(text) isnt 'object'
+    return text
+  if locale
+    lang = locale.split('_')[0] or 'en'
+    trans_text = text[locale] or text[lang] or ''
+  if not trans_text
+    key = Object.keys(text)[0]
+    trans_text = text[key]
+  return trans_text
+ 
 
-    
-angular.module 'supLocale', ['ngCookies']
+angular.module 'supLocales', ['ngCookies']
 
 .run [
-  'supLocale'
+  'supLocales'
   (
-    supLocale
+    supLocales
   ) ->
-    supLocale.init()
+    if not supLocales.inited
+      supLocales.init()
 ]
 
-.service "supLocale", [
+.service "supLocales", [
+  '$location'
   '$rootScope'
-  '$cookieStore'
+  '$cookies'
   (
+    $location
     $rootScope
-    $cookieStore
+    $cookies
   ) ->
     default_locale = 'en_US'
     self = @
+    @inited = false
     
     @init = (loc, case_sensitive)->
-      CASE_SENSITIVE = Boolean(case_sensitive)
+      @inited = true
       
+      CASE_SENSITIVE = Boolean(case_sensitive)
+
       if loc
         default_locale = loc
-      
+
       userLang = navigator.language or navigator.userLanguage
       userLocale = userLang.replace('-','_')
+
       try
-        cookieLocale = $cookieStore.get('current_locale')
+        cookieLocale = $cookies.get('current_locale')
       catch e
         cookieLocale = null
-    
-      currLocale = if cookieLocale then cookieLocale else userLocale
+      
+      params = $location.search()
+      if params.lang
+        currLocale = params.lang
+      else
+        currLocale = if cookieLocale then cookieLocale else userLocale
+
       self.set(currLocale)
       $rootScope._ = angular.translate = translate
+      $rootScope._t = angular.self_translate = self_translate
     
     @translate = (args)->
       return translate.apply(this, arguments)
     
     @set = (loc) ->
-      locale = setLocale(loc)
-      locale = locale or default_locale
+      locale = setLocale(loc) or default_locale
       $rootScope.locale = locale
       $rootScope.lang = locale.split('_')[0] or 'en'
-      $cookieStore.put('current_locale', locale)
-      
+      $cookies.put('current_locale', locale)
+    
+    @append = (translates)->
+      append(translates)
+    
+    @restore = ->
+      restore()
+    
     @get = ->
       try
-        cookieLocale = $cookieStore.get 'current_locale'
+        cookieLocale = $cookies.get 'current_locale'
       catch e
         cookieLocale = null
       return cookieLocale
     
     @match = (lang1, lang2)->
+      if typeof(lang1) isnt 'string' or typeof(lang2) isnt 'string'
+        return false
       lang1 = lang1.replace('-','_')
       lang2 = lang2.replace('-','_')
       return lang1.toLowerCase() == lang2.toLowerCase()
-    
+        
     return  @
 ]

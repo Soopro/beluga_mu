@@ -131,10 +131,10 @@ angular.module 'supLocales', ['ngCookies']
         cookieLocale = $cookies.get('current_locale')
       catch e
         cookieLocale = null
-      
       params = $location.search()
       if params.lang
         currLocale = params.lang
+        $location.search("lang", null)
       else
         currLocale = if cookieLocale then cookieLocale else userLocale
 

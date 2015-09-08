@@ -80,7 +80,7 @@ if document.querySelector('[modern-browser-tester]')
   return if not body
   try
     body.innerHTML = '<h1>'+browser.name+' / '+browser.ver+
-    ' / '+browser.mobile+'</h1>'+
+    ' / '+browser.mobile.name+'</h1>'+
     '<p>Name: '+navigator.appName+'</p>'+
     '<p>Version: '+navigator.appVersion+'</p>'+
     '<small>&lt; '+navigator.userAgent+' &gt;</small>'

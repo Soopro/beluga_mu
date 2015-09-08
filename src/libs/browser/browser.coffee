@@ -17,7 +17,14 @@ mobile_list = [
   {pattern:/BlackBerry/i, name:'BlackBerry', alias:'blackberry'}
   {pattern:/Windows Phone/i, name:'WindowsPhone', alias:'wp'}
 ]  
-  
+
+modern_browsers = ['chrome','opera','safari','firefox','msie']
+
+black_list = 
+  android: ['UCBrowser', 'Opera', 'SougouMobile', 'DolphineBrowser',
+            'MQQBrowser', 'Baidu']
+  ios: ['SougouMobile']
+
 mobile = do ->
   for m in mobile_list
     if navigator.userAgent.match(m.pattern)
@@ -54,18 +61,24 @@ browser = do ->
 
   return browser
 
-modern_browsers = ['chrome','opera','safari','firefox','msie']
-MSIE = 'msie'
+# test if modern browser
 is_modern_browser = true
 
 unless browser.alias in modern_browsers
   is_modern_browser = false
 
-if browser.alias is MSIE and parseInt(browser.ver) < 10
+if browser.alias is 'msie' and parseInt(browser.ver) < 10
   is_modern_browser = false
 
 if navigator.userAgent.indexOf('Mobile') > -1
   is_modern_browser = true
+
+# except for some mobile browsers
+if browser.mobile
+  for blackbrowser in black_list[browser.mobile.alias]
+    if navigator.userAgent.indexOf(blackbrowser)
+      is_modern_browser = false
+      break
 
 browser.is_modern_browser = is_modern_browser
 
@@ -85,8 +98,8 @@ if document.querySelector('[modern-browser-tester]')
     mobile_name+' '+
     modern+' '+
     '</h1>'+
-    '<p>Name: '+navigator.appName+'</p>'+
-    '<p>Version: '+navigator.appVersion+'</p>'+
+    '<p>appName: '+navigator.appName+'</p>'+
+    '<p>appVersion: '+navigator.appVersion+'</p>'+
     '<small>&lt; '+navigator.userAgent+' &gt;</small>'
     
   catch e

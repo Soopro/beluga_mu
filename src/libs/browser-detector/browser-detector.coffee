@@ -1,6 +1,6 @@
 # -------------------------------
 # Browser Detector
-# Version:  0.0.1
+# Version:  0.0.2
 # -------------------------------
 is_exports = typeof exports isnt "undefined" and exports isnt null
 root = if is_exports then exports else this
@@ -88,29 +88,19 @@ console.log 'Detect browser: ', browser
 # make it global, pass to other frameworks.
 root.sup.browser = browser
 
+
+# get root <html>
+html = document.documentElement
+return if not html
+
+if typeof(html.hasAttribute) isnt 'function'
+  html.hasAttribute = (attrName)->
+    return typeof(html[attrName]) isnt 'undefined'
+
+
 # process test
-if document.querySelector('[modern-browser-tester]')
-  body = document.body
-  return if not body
-  modern = if browser.is_modern_browser then 'Modern' else 'Old'
-  mobile_name = if browser.mobile then browser.mobile.name else '-'
-  body.innerHTML = '<h1>'+browser.name+' '+browser.ver+' '+
-  mobile_name+' '+
-  modern+' '+
-  '</h1>'+
-  '<p>appName: '+navigator.appName+'</p>'+
-  '<p>appVersion: '+navigator.appVersion+'</p>'+
-  '<small>&lt; '+navigator.userAgent+' &gt;</small>'
-  return
+if html.hasAttribute('modern-browser-tester')
 
-# process html
-if not document.querySelector('[modern-browser]')
-  return
-
-if not is_modern_browser
-  html = document.documentElement
-  return if not html
-  
   for attr in html.attributes
     html.removeAttribute(attr)
   
@@ -119,20 +109,74 @@ if not is_modern_browser
   
   head = document.createElement("HEAD")
   head_html = ''+
+  '<title>Browser Tester</title>'
+  
+  head.innerHTML = head_html
+  html.appendChild(head)
+  
+  body = document.createElement("BODY")
+  
+  modern = if browser.is_modern_browser then 'Modern' else 'Old'
+  mobile_name = if browser.mobile then browser.mobile.name else '-'
+  
+  body.innerHTML = ''+
+  '<h1>'+browser.name+' '+browser.ver+' '+mobile_name+' '+modern+'</h1>'+
+  '<p>appName: '+navigator.appName+'</p>'+
+  '<p>appVersion: '+navigator.appVersion+'</p>'+
+  '<small>&lt; '+navigator.userAgent+' &gt;</small>'
+  
+  body.innerHTML = body_html
+  html.appendChild(body)
+  return
+
+# process failback
+if not html.hasAttribute('modern-browser')
+  return
+
+if not is_modern_browser
+  default_assets_src = 'http://libs.soopro.com/browser-detector/'
+  assets_src = html.getAttribute('modern-browser')
+  
+  if typeof(assets_src) isnt 'string' or assets_src in ['false', 'null']
+    assets_src = default_assets_src
+
+  try
+    if assets_src in ['.', 'self', 'true', true]
+      assets_path = ''
+    else
+      assets_path = assets_src
+      
+    if assets_path isnt '' and assets_path.substr(-1) isnt '/'
+      assets_path = assets_path+'/'
+  catch e
+    assets_path = ''
+
+  remove_attr_list = []
+  for attr in html.attributes
+    remove_attr_list.push(attr.name)
+  for attr in remove_attr_list
+    html.removeAttribute(attr)
+  
+  while html.firstChild
+    html.removeChild(html.firstChild)
+  
+  
+  
+  head = document.createElement("HEAD")
+  head_html = ''+
   '<title>Old Browser</title>'+
-  '<link href="http://libs.soopro.com/browser/browser.css" '+
-  'rel="stylesheet">'
+  '<link href="'+assets_path+'browser-detector.css" rel="stylesheet">'
   
   head.innerHTML = head_html
   html.appendChild(head)
 
 
-  body = document.createElement("BODY")  
+  body = document.createElement("BODY")
   body_html = ''+
 
   '<div id="wrapper">'+
   ' <div id="logo">'+
-  '   <img src="http://libs.soopro.com/brand/logo.png" alt="Soopro"/>'+
+  '   <img src="'+assets_path+'browser_detector_logo.png" alt="Soopro"/>'+
   ' </div>'+
   ' <div class="content">'+
   '   <p>'+
@@ -145,25 +189,25 @@ if not is_modern_browser
   ' <div class="browsers">'+
   '   <div class="browser">'+
   '     <a href="http://www.firefox.com" target="_blank">'+
-  '       <img src="http://libs.soopro.com/browser/browser_firefox.png" '+
+  '       <img src="'+assets_path+'browser_firefox.png" '+
   '        alt="Firefox"/>'+
   '     </a>'+
   '   </div>'+
   '   <div class="browser">'+
   '     <a href="http://www.chrome.com" target="_blank">'+
-  '       <img src="http://libs.soopro.com/browser/browser_chrome.png" '+
+  '       <img src="'+assets_path+'browser_chrome.png" '+
   '        alt="Chrome"/>'+
   '     </a>'+
   '   </div>'+
   '   <div class="browser">'+
   '     <a href="http://support.apple.com/downloads/#safari" target="_blank">'+
-  '       <img src="http://libs.soopro.com/browser/browser_safari.png" '+
+  '       <img src="'+assets_path+'browser_safari.png" '+
   '        alt="Safari"/>'+
   '     </a>'+
   '   </div>'+
   '   <div class="browser">'+
   '     <a href="http://www.opera.com/" target="_blank">'+
-  '       <img src="http://libs.soopro.com/browser/browser_opera.png" '+
+  '       <img src="'+assets_path+'browser_opera.png" '+
   '        alt="Opera"/>'+
   '     </a>'+
   '   </div>'+
@@ -174,4 +218,3 @@ if not is_modern_browser
   '</div>'
   body.innerHTML = body_html
   html.appendChild(body)
-  

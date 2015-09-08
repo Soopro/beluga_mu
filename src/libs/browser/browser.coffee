@@ -47,13 +47,14 @@ browser = do ->
   M.join " "
   
   browser = 
-    alias: M[0]
+    alias: if typeof(M[0]) is 'string' then M[0].toLowerCase() else null
+    name: M[0]
     ver: M[1]
     mobile: mobile
 
   return browser
 
-modern_browsers = ['Chrome','Opera','Safari','Firefox','MSIE']
+modern_browsers = ['chrome','opera','safari','firefox','msie']
 is_modern_browser = true
 
 unless browser.alias in modern_browsers
@@ -74,8 +75,17 @@ root.sup.browser = browser
 
 # process test
 if document.querySelector('[modern-browser-tester]')
-  document.body.innerHTML = '<p>'+browser.toString()+'</p>'
-  document.body.appendChild(tester)
+  body = document.body
+  return if not body
+  try
+    body.innerHTML = '<h1>'+browser.name+' / '+browser.ver+
+    ' / '+browser.mobile+'</h1>'+
+    '<p>Name: '+navigator.appName+'</p>'+
+    '<p>Version: '+navigator.appVersion+'</p>'+
+    '<small>&lt; '+navigator.userAgent+' &gt;</small>'
+    
+  catch e
+    console.error e
   return
 
 # process html

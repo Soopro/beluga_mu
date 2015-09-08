@@ -95,7 +95,8 @@ if not is_modern_browser
   # for attr in body.attributes
   #   new_body.setAttribute(attr.name, attr.value) if attr.name and attr.value
   
-  oldbrowser = '<link href="http://libs.soopro.com/browser/browser.css" rel="stylesheet">'+
+  oldbrowser = ''+
+  '<link href="http://libs.soopro.com/browser/browser.css" rel="stylesheet">'+
   '<div id="wrapper">'+
   ' <div id="logo">'+
   '   <img src="http://libs.soopro.com/brand/logo.png" alt="Soopro"/>'+
@@ -127,12 +128,8 @@ if not is_modern_browser
   '       <img src="http://libs.soopro.com/browser/browser_opera.png" alt="Opera"/>'+
   '     </a>'+
   '   </div>'+
-  '   <div class="browser">'+
-  '     <a href="http://ie.sogou.com/" target="_blank">'+
-  '       <img src="http://libs.soopro.com/browser/browser_sogou.png" alt="Sogou"/>'+
-  '     </a>'+
-  '   </div>'+
   ' </div>'+
+  ' <div><p><small>'+browser.toString()+'</small></p></div>'+
   ' <div class="copyright">'+
   '   <small>&copy; Soopro Co.,ltd.</small>'+
   ' </div>'+

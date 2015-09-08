@@ -112,27 +112,25 @@ if not document.querySelector('[modern-browser]')
   return
 
 if not is_modern_browser
-  body = document.body
-  return if not body
-  
-  html = body.parentNode
+  html = document.getElementsByTagName("html")
   return if not html
-  html.removeChild(body)
   
-  styles = document.querySelectorAll('link[rel="stylesheet"]')
-  for css in styles
-    css.parentNode.removeChild(css)
-  scripts = document.querySelectorAll('script')
-  for script in scripts
-    script.parentNode.removeChild(script)
-
-  new_body = document.createElement("BODY")
-  # for attr in body.attributes
-  #   new_body.setAttribute(attr.name, attr.value) if attr.name and attr.value
+  while html.firstChild
+    html.removeChild(html.firstChild)
   
-  oldbrowser = ''+
+  head = document.createElement("HEAD")
+  head_html = ''+
+  '<title>Old Browser</title>'+
   '<link href="http://libs.soopro.com/browser/browser.css" '+
-  'rel="stylesheet">'+
+  'rel="stylesheet">'
+
+  head.innerHTML = head_html
+  html.appendChild(head)
+
+  body = document.createElement("BODY")
+  
+  body_html = ''+
+
   '<div id="wrapper">'+
   ' <div id="logo">'+
   '   <img src="http://libs.soopro.com/brand/logo.png" alt="Soopro"/>'+
@@ -175,6 +173,6 @@ if not is_modern_browser
   '   <small>&copy; Soopro Co.,ltd.</small>'+
   ' </div>'+
   '</div>'
-  new_body.innerHTML = oldbrowser
+  body.innerHTML = body_html
   html.appendChild(new_body)
   

@@ -124,6 +124,7 @@ if not is_modern_browser
   console.log head
   head.innerHTML = head_html
   console.log head
+  console.log html.appendChild
   html.appendChild(head)
 
   body = document.createElement("BODY")

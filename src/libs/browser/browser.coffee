@@ -109,19 +109,21 @@ if not document.querySelector('[modern-browser]')
 
 if not is_modern_browser
   html = document.getElementsByTagName("html")
-  console.log html
   return if not html
   
   while html.firstChild
     html.removeChild(html.firstChild)
+  
+  console.log html
   
   head = document.createElement("HEAD")
   head_html = ''+
   '<title>Old Browser</title>'+
   '<link href="http://libs.soopro.com/browser/browser.css" '+
   'rel="stylesheet">'
-
+  console.log head
   head.innerHTML = head_html
+  console.log head
   html.appendChild(head)
 
   body = document.createElement("BODY")
@@ -171,5 +173,5 @@ if not is_modern_browser
   ' </div>'+
   '</div>'
   body.innerHTML = body_html
-  html.appendChild(new_body)
+  html.appendChild(body)
   

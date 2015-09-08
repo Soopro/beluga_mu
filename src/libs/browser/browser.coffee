@@ -77,6 +77,7 @@ if navigator.userAgent.indexOf('Mobile') > -1
 if browser.mobile
   _black_list = black_list[browser.mobile.alias] or []
   for blackbrowser in _black_list
+    window.alert(navigator.userAgent.indexOf(blackbrowser))
     if navigator.userAgent.indexOf(blackbrowser) > -1
       is_modern_browser = false
       break

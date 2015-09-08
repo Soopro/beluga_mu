@@ -110,7 +110,7 @@ if not document.querySelector('[modern-browser]')
 if not is_modern_browser
   html = document.documentElement
   return if not html
-  console.log html.childNodes
+  console.log html, html.childNodes
   for child in html.childNodes
     console.log child
     html.removeChild(child)
@@ -122,10 +122,7 @@ if not is_modern_browser
   '<title>Old Browser</title>'+
   '<link href="http://libs.soopro.com/browser/browser.css" '+
   'rel="stylesheet">'
-  console.log head
   head.innerHTML = head_html
-  console.log head
-  console.log html.appendChild
   html.appendChild(head)
 
   body = document.createElement("BODY")

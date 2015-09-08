@@ -72,6 +72,12 @@ console.log 'Detect browser: ', browser
 # make it global, pass to other frameworks.
 root.sup.browser = browser
 
+# process test
+if document.querySelector('[modern-browser-tester]')
+  document.body.innerHTML = '<p>'+browser.toString()+'</p>'
+  document.body.appendChild(tester)
+  return
+
 # process html
 if not document.querySelector('[modern-browser]')
   return
@@ -96,13 +102,16 @@ if not is_modern_browser
   #   new_body.setAttribute(attr.name, attr.value) if attr.name and attr.value
   
   oldbrowser = ''+
-  '<link href="http://libs.soopro.com/browser/browser.css" rel="stylesheet">'+
+  '<link href="http://libs.soopro.com/browser/browser.css" '+
+  'rel="stylesheet">'+
   '<div id="wrapper">'+
   ' <div id="logo">'+
   '   <img src="http://libs.soopro.com/brand/logo.png" alt="Soopro"/>'+
   ' </div>'+
   ' <div class="content">'+
-  '   <p>Your browser is too old. Hope you can change more reliable web browser.'+
+  '   <p>'+
+  '     Your browser is too old. Hope you can change more'+
+  '     reliable web browser.'+
   '   <br>We recommend you choose better browser following:</p>'+
   '   <p>您的浏览器老掉牙了，希望您能紧跟时代立刻升级。'+
   '   <br>推荐你选择使用以下浏览器：</p>'+
@@ -110,29 +119,33 @@ if not is_modern_browser
   ' <div class="browsers">'+
   '   <div class="browser">'+
   '     <a href="http://www.firefox.com" target="_blank">'+
-  '       <img src="http://libs.soopro.com/browser/browser_firefox.png" alt="Firefox"/>'+
+  '       <img src="http://libs.soopro.com/browser/browser_firefox.png" '+
+  '        alt="Firefox"/>'+
   '     </a>'+
   '   </div>'+
   '   <div class="browser">'+
   '     <a href="http://www.chrome.com" target="_blank">'+
-  '       <img src="http://libs.soopro.com/browser/browser_chrome.png" alt="Chrome"/>'+
+  '       <img src="http://libs.soopro.com/browser/browser_chrome.png" '+
+  '        alt="Chrome"/>'+
   '     </a>'+
   '   </div>'+
   '   <div class="browser">'+
   '     <a href="http://support.apple.com/downloads/#safari" target="_blank">'+
-  '       <img src="http://libs.soopro.com/browser/browser_safari.png" alt="Safari"/>'+
+  '       <img src="http://libs.soopro.com/browser/browser_safari.png" '+
+  '        alt="Safari"/>'+
   '     </a>'+
   '   </div>'+
   '   <div class="browser">'+
   '     <a href="http://www.opera.com/" target="_blank">'+
-  '       <img src="http://libs.soopro.com/browser/browser_opera.png" alt="Opera"/>'+
+  '       <img src="http://libs.soopro.com/browser/browser_opera.png" '+
+  '        alt="Opera"/>'+
   '     </a>'+
   '   </div>'+
   ' </div>'+
-  ' <div><p><small>'+browser.toString()+'</small></p></div>'+
   ' <div class="copyright">'+
   '   <small>&copy; Soopro Co.,ltd.</small>'+
   ' </div>'+
   '</div>'
   new_body.innerHTML = oldbrowser
   html.appendChild(new_body)
+  

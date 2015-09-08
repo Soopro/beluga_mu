@@ -194,7 +194,7 @@ if not is_modern_browser
   '     reliable web browser.'+
   '   <br>We recommend you choose better browser following:</p>'+
   '   <p>您的浏览器老掉牙了，希望您能紧跟时代立刻升级。'+
-  '   <br>推荐你选择使用以下浏览器：</p>'+
+  '   推荐您选择使用以下浏览器：</p>'+
   ' </div>'+
   ' <div class="browsers">'+
   '   <div class="browser">'+

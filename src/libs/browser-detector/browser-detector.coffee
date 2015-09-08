@@ -108,10 +108,7 @@ if html.hasAttribute('modern-browser-tester')
     html.removeChild(html.firstChild)
   
   head = document.createElement("HEAD")
-  head_html = ''+
-  '<title>Browser Tester</title>'
-  
-  head.innerHTML = head_html
+  head.innerHTML = '<title>Browser Tester</title>'
   html.appendChild(head)
   
   body = document.createElement("BODY")
@@ -125,7 +122,6 @@ if html.hasAttribute('modern-browser-tester')
   '<p>appVersion: '+navigator.appVersion+'</p>'+
   '<small>&lt; '+navigator.userAgent+' &gt;</small>'
   
-  body.innerHTML = body_html
   html.appendChild(body)
   return
 

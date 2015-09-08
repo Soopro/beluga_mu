@@ -109,10 +109,10 @@ if not document.querySelector('[modern-browser]')
 
 if not is_modern_browser
   html = document.documentElement
-  console.log html, Boolean(html)
   return if not html
   
   for child in html.childNodes
+    console.log child
     html.removeChild(child)
   
   console.log html

@@ -73,8 +73,13 @@ if browser.alias is 'msie' and parseInt(browser.ver) < 10
 if navigator.userAgent.indexOf('Mobile') > -1
   is_modern_browser = true
 
-# except for some mobile browsers
+# except for mobile browsers
 if browser.mobile
+  # ios 6
+  if browser.alias is 'safari' and parseInt(browser.ver) < 7
+    is_modern_browser = false
+  
+  # others
   _black_list = black_list[browser.mobile.alias] or []
   for blackbrowser in _black_list
     if navigator.userAgent.indexOf(blackbrowser) > -1

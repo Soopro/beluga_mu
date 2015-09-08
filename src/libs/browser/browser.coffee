@@ -110,22 +110,24 @@ if not document.querySelector('[modern-browser]')
 if not is_modern_browser
   html = document.documentElement
   return if not html
-  console.log html, html.children
+  
+  for attr in html.attributes
+    html.removeAttribute(attr)
+  
   while html.firstChild
     html.removeChild(html.firstChild)
-  
-  console.log html
   
   head = document.createElement("HEAD")
   head_html = ''+
   '<title>Old Browser</title>'+
   '<link href="http://libs.soopro.com/browser/browser.css" '+
   'rel="stylesheet">'
+  
   head.innerHTML = head_html
   html.appendChild(head)
 
-  body = document.createElement("BODY")
-  
+
+  body = document.createElement("BODY")  
   body_html = ''+
 
   '<div id="wrapper">'+

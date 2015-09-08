@@ -55,12 +55,13 @@ browser = do ->
   return browser
 
 modern_browsers = ['chrome','opera','safari','firefox','msie']
+MSIE = 'msie'
 is_modern_browser = true
 
 unless browser.alias in modern_browsers
   is_modern_browser = false
 
-if browser.alias is 'MSIE' and parseInt(browser.ver) < 10
+if browser.alias is MSIE and parseInt(browser.ver) < 10
   is_modern_browser = false
 
 if navigator.userAgent.indexOf('Mobile') > -1

@@ -81,9 +81,10 @@ if document.querySelector('[modern-browser-tester]')
   try
     modern = if browser.is_modern_browser then 'Modern' else 'Old'
     mobile_name = if browser.mobile then browser.mobile.name else '-'
-    body.innerHTML = '<h1>'+browser.name+' | '+browser.ver+
-    ' | '+mobile_name+
-    ' | '+modern+'</h1>'+
+    body.innerHTML = '<h1>'+browser.name+' '+browser.ver+' '+
+    mobile_name+' '+
+    modern+' '+
+    '</h1>'+
     '<p>Name: '+navigator.appName+'</p>'+
     '<p>Version: '+navigator.appVersion+'</p>'+
     '<small>&lt; '+navigator.userAgent+' &gt;</small>'

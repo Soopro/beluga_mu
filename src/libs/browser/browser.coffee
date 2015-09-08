@@ -108,11 +108,11 @@ if not document.querySelector('[modern-browser]')
   return
 
 if not is_modern_browser
-  html = document.getElementsByTagName("html")
+  html = document.documentElement
   return if not html
   
-  while html.firstChild
-    html.removeChild(html.firstChild)
+  for child in html.childNodes
+    html.removeChild(child)
   
   console.log html
   

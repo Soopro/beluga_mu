@@ -92,19 +92,15 @@ root.sup.browser = browser
 if document.querySelector('[modern-browser-tester]')
   body = document.body
   return if not body
-  try
-    modern = if browser.is_modern_browser then 'Modern' else 'Old'
-    mobile_name = if browser.mobile then browser.mobile.name else '-'
-    body.innerHTML = '<h1>'+browser.name+' '+browser.ver+' '+
-    mobile_name+' '+
-    modern+' '+
-    '</h1>'+
-    '<p>appName: '+navigator.appName+'</p>'+
-    '<p>appVersion: '+navigator.appVersion+'</p>'+
-    '<small>&lt; '+navigator.userAgent+' &gt;</small>'
-    
-  catch e
-    throw e
+  modern = if browser.is_modern_browser then 'Modern' else 'Old'
+  mobile_name = if browser.mobile then browser.mobile.name else '-'
+  body.innerHTML = '<h1>'+browser.name+' '+browser.ver+' '+
+  mobile_name+' '+
+  modern+' '+
+  '</h1>'+
+  '<p>appName: '+navigator.appName+'</p>'+
+  '<p>appVersion: '+navigator.appVersion+'</p>'+
+  '<small>&lt; '+navigator.userAgent+' &gt;</small>'
   return
 
 # process html

@@ -109,6 +109,7 @@ if not document.querySelector('[modern-browser]')
 
 if not is_modern_browser
   html = document.getElementsByTagName("html")
+  console.log html
   return if not html
   
   while html.firstChild

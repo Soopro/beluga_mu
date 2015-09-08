@@ -138,15 +138,20 @@ if not is_modern_browser
   default_assets_src = 'http://libs.soopro.com/browser-detector/'
   assets_src = html.getAttribute('modern-browser')
   
-  if assets_src is true
+  if typeof(assets_src) is 'string' \
+  and assets_src.toLowerCase() in ['0', 'false', 'null']
+    return
+  else if assets_src in [false, 0, null, undefined]
+    return
+  else if typeof(assets_src) isnt 'string'
     assets_src = ''
-
-  if typeof(assets_src) isnt 'string' \
-  or assets_src.toLowerCase() in ['false', 'null']
+  
+  if not assets_src or assets_src.toLowerCase() in ['true', '1']
     assets_src = default_assets_src
+  
 
   try
-    if assets_src in ['.', 'self', 'true']
+    if assets_src in ['.', 'self']
       assets_path = ''
     else
       assets_path = assets_src

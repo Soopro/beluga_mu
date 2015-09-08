@@ -73,6 +73,7 @@ if browser.alias is 'msie' and parseInt(browser.ver) < 10
 if navigator.userAgent.indexOf('Mobile') > -1
   is_modern_browser = true
 
+window.alert('fuck')
 # except for some mobile browsers
 if browser.mobile
   _black_list = black_list[browser.mobile.alias] or []

@@ -23,7 +23,7 @@ modern_browsers = ['chrome','opera','safari','firefox','msie']
 black_list = 
   android: ['UCBrowser', 'Opera', 'SougouMobile', 'DolphineBrowser',
             'MQQBrowser', 'Baidu']
-  ios: ['SougouMobile']
+  ios: ['SougouMobile', 'OS 6_']
 
 mobile = do ->
   for m in mobile_list

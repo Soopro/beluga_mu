@@ -40,11 +40,9 @@ browser = do ->
 
   if /trident/i.test(M[1])
     tem = /\brv[ :]+(\d+)/g.exec(ua) or []
-    console.log "IE " + (tem[1] or "")
     return "IE " + (tem[1] or "")
   if M[1] is "Chrome"
     tem = ua.match(/\bOPR\/(\d+)/)
-    console.log "Opera " + tem[1]  if tem?
     return "Opera " + tem[1]  if tem?
   
   if M[2]
@@ -55,7 +53,7 @@ browser = do ->
   console.log M
   M.splice 1, 1, tem[1]  if (tem = ua.match(/version\/(\d+)/i))?
   M.join " "
-  console.log M
+  console.log M, M.join " "
   
   browser = 
     alias: if typeof(M[0]) is 'string' then M[0].toLowerCase() else null

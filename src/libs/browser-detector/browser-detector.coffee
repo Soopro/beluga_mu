@@ -18,7 +18,13 @@ mobile_list = [
   {pattern:/Windows Phone/i, name:'WindowsPhone', alias:'wp'}
 ]  
 
-modern_browsers = ['chrome','opera','safari','firefox','msie']
+modern_browsers = {
+  'chrome': 40,
+  'opera': 30,
+  'safari': 8,
+  'firefox': 40,
+  'msie': 10
+}
 
 black_list = 
   android: ['UCBrowser', 'Opera', 'SougouMobile', 'DolphineBrowser',
@@ -28,7 +34,9 @@ black_list =
 mobile = do ->
   for m in mobile_list
     if navigator.userAgent.match(m.pattern)
-      return m
+      return {name: m.name, alias: m.alias}
+  if navigator.userAgent.indexOf('Mobile') > -1
+    return {name: '', alias: '' }
   return null
   
 browser = do ->
@@ -37,42 +45,49 @@ browser = do ->
   M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i)
   if not M
     M = []
-
+  
+  name = null
+  ver = null
+  
   if /trident/i.test(M[1])
     tem = /\brv[ :]+(\d+)/g.exec(ua) or []
-    return "IE " + (tem[1] or "")
+    name = "MSIE"
+    ver = (tem[1] or "") 
+
   if M[1] is "Chrome"
     tem = ua.match(/\bOPR\/(\d+)/)
-    return "Opera " + tem[1]  if tem?
+    name = "Opera" if tem?
+    ver = tem[1] if tem?
   
-  if M[2]
-    M = [ M[1],M[2] ] 
-  else 
-    M = [ navigator.appName, navigator.appVersion, "-?" ]
-  
-  console.log M
-  M.splice 1, 1, tem[1]  if (tem = ua.match(/version\/(\d+)/i))?
-  M.join " "
-  console.log M, M.join " "
+  if not name and not ver
+    if M[2]
+      M = [ M[1], M[2] ] 
+    else 
+      M = [ navigator.appName, navigator.appVersion, "-?" ]
+    
+    M.splice 1, 1, tem[1]  if (tem = ua.match(/version\/(\d+)/i))?
+    
+    name = M[0]
+    ver = M[1]
   
   browser = 
-    alias: if typeof(M[0]) is 'string' then M[0].toLowerCase() else null
-    name: M[0]
-    ver: M[1]
+    alias: if typeof(name) is 'string' then name.toLowerCase() else null
+    name: name
+    ver: ver
     mobile: mobile
 
   return browser
 
+check_version = (browser)->
+  return modern_browsers[browser.alias] > parseInt(browser.ver)
+
 # test if modern browser
 is_modern_browser = true
 
-unless browser.alias in modern_browsers
+if check_version(browser)
   is_modern_browser = false
 
-if browser.alias is 'msie' and parseInt(browser.ver) < 10
-  is_modern_browser = false
-
-if navigator.userAgent.indexOf('Mobile') > -1
+if browser.mobile
   is_modern_browser = true
 
 # except for mobile browsers

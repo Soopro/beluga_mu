@@ -1,6 +1,6 @@
 # -------------------------------
 # Browser Detector
-# Version:  0.0.2
+# Version:  0.0.3
 # -------------------------------
 is_exports = typeof exports isnt "undefined" and exports isnt null
 root = if is_exports then exports else this

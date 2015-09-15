@@ -105,7 +105,7 @@ if browser.mobile
 
 browser.is_modern_browser = is_modern_browser
 
-console.log 'Detect browser: ', browser
+# console.log 'Detect browser: ', browser
 
 # make it global, pass to other frameworks.
 root.sup.browser = browser

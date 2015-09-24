@@ -1,5 +1,6 @@
 # -------------------------------
 # sup Localized
+# Version:  0.1.0
 # -------------------------------
 
 is_exports = typeof exports isnt "undefined" and exports isnt null
@@ -31,7 +32,7 @@ load = (loc_text_list)->
   return loc_text_dict
   
 append = (new_text_list)->
-  if not  (new_text_list instanceof Array)
+  if not (new_text_list instanceof Array)
     return
   for text in new_text_list
     if text.msgid and text.msgstr

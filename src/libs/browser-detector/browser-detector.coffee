@@ -208,8 +208,9 @@ if not is_modern_browser
   ' <div class="content">'+
   '   <p>'+
   '     Your browser is too old. Hope you can change more'+
-  '     reliable web browser.'+
-  '   <br>We recommend you choose better browser following:</p>'+
+  '     reliable web browser. '+
+  '     We recommend you choose better browser following:'+
+  '   </p>'+
   '   <p>您的浏览器老掉牙了，希望您能紧跟时代立刻升级。'+
   '   推荐您使用这些浏览器：</p>'+
   ' </div>'+

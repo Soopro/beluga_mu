@@ -17,7 +17,11 @@
       return;
     }
     for (var i=0; i < mailform_list.length; i++){
-      mailform_list[i].addEventListener('submit', process_fields);
+      var mailform = mailform_list[i];
+      if (mailform.action.indexOf('mailto:') != 0) {
+        continue;
+      }
+      mailform.addEventListener('submit', process_fields);
     }
   }
   function is_unchecked(field){

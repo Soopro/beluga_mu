@@ -47,8 +47,12 @@
       if (field.title) {
         title = field.title;
       }else if(field.name && field.name != 'subject'){
-        var _name = field.name;
-        title = _name.charAt(0).toUpperCase() + _name.slice(1) + ': ';
+        if(['body', 'message'].indexOf(field.name) >= 0){
+          title = '';
+        }else{
+          var _name = field.name;
+          title = _name.charAt(0).toUpperCase() + _name.slice(1) + ': ';
+        }
       }
       if (field.name == 'subject'){
         subject = field.value || subject;

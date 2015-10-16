@@ -5,7 +5,9 @@
 
 (function(window) {
   "use strict";
-
+  
+  var msg_fields = ['body', 'message'];
+  
   function init() {
     if (!inited){
       process_forms();
@@ -47,7 +49,7 @@
       if (field.title) {
         title = field.title;
       }else if(field.name && field.name != 'subject'){
-        if(['body', 'message'].indexOf(field.name) >= 0){
+        if(msg_fields.indexOf(field.name) >= 0){
           title = '';
         }else{
           var _name = field.name;
@@ -61,7 +63,11 @@
         continue;
       }
       if (title != null){
-        maildata.push({'title': title, 'value': field.value || ''});
+        maildata.push({
+          'name': field.name,
+          'title': title,
+          'value': field.value || ''
+        });
       }
     }
     var mail_content = process_mail(maildata);
@@ -72,6 +78,12 @@
     e.preventDefault();
     return false;
   }
+  function msg_filter(content, data){
+    if (msg_fields.indexOf(data.name) >= 0){
+      content = content+'\n';
+    }
+    return content
+  }
   function process_mail(maildata) {
     var mail_content = '';
     for (var i = 0; i < maildata.length; i++){
@@ -79,7 +91,9 @@
       if (data.title){
         data.title = data.title+" "
       }
+      mail_content = msg_filter(mail_content);
       mail_content = mail_content+data.title+data.value+'\n';
+      mail_content = msg_filter(mail_content);
     }
     return mail_content;
   }

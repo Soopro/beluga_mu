@@ -76,7 +76,10 @@
     var mail_content = '';
     for (var i = 0; i < maildata.length; i++){
       var data = maildata[i];
-      mail_content = mail_content+data.title+" "+data.value+'\n';
+      if (data.title){
+        data.title = data.title+" "
+      }
+      mail_content = mail_content+data.title+data.value+'\n';
     }
     return mail_content;
   }

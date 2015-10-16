@@ -79,6 +79,9 @@
     return false;
   }
   function msg_filter(content, data){
+    if (!content){
+      return content;
+    }
     if (msg_fields.indexOf(data.name) >= 0){
       content = content+'\n';
     }

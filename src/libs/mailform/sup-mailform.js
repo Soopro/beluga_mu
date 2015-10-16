@@ -57,7 +57,7 @@
         continue;
       }
       if (title){
-        maildata.push({'title': field.title, 'value': field.value || ''});
+        maildata.push({'title': title, 'value': field.value || ''});
       }
     }
     var mail_content = process_mail(maildata);
@@ -72,7 +72,7 @@
     var mail_content = '';
     for (var i = 0; i < maildata.length; i++){
       var data = maildata[i];
-      mail_content = mail_content+data.title+": "+data.value+'\n';
+      mail_content = mail_content+data.title+" "+data.value+'\n';
     }
     return mail_content;
   }

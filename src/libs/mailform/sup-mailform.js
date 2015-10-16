@@ -91,9 +91,9 @@
       if (data.title){
         data.title = data.title+" "
       }
-      mail_content = msg_filter(mail_content);
+      mail_content = msg_filter(mail_content, data);
       mail_content = mail_content+data.title+data.value+'\n';
-      mail_content = msg_filter(mail_content);
+      mail_content = msg_filter(mail_content, data);
     }
     return mail_content;
   }

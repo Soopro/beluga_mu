@@ -43,7 +43,7 @@
     
     for (var i = 0; i < fields.length; i++){
       var field = fields[i];
-      var title = '';
+      var title = null;
       if (field.title) {
         title = field.title;
       }else if(field.name && field.name != 'subject'){
@@ -60,7 +60,7 @@
       if (is_unchecked(field)){
         continue;
       }
-      if (title){
+      if (title != null){
         maildata.push({'title': title, 'value': field.value || ''});
       }
     }

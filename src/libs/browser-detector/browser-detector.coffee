@@ -193,11 +193,11 @@ rendering = ->
       html.removeChild(html.firstChild)
   
     head = document.createElement("HEAD")
-    head.innerHTML = head_template()
+    head.innerHTML = head_template(assets_path)
     html.appendChild(head)
 
     body = document.createElement("BODY")
-    body.innerHTML = body_template()
+    body.innerHTML = body_template(assets_path)
     html.appendChild(body)
 
 
@@ -270,11 +270,11 @@ window.document.ready ->
 
 # templates ----------------------->
 
-head_template = ->
+head_template = (assets_path)->
   '<title>Old Browser</title>'+
   '<link href="'+assets_path+'/browser-detector.css" rel="stylesheet">'
 
-body_template = ->
+body_template = (assets_path)->
   '<div id="wrapper">'+
   ' <div id="logo">'+
   '   <img src="'+assets_path+'/browser_detector_logo.png" alt="Soopro"/>'+

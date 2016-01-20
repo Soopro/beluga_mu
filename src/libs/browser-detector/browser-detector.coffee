@@ -120,6 +120,108 @@ if typeof(html.hasAttribute) isnt 'function'
   html.hasAttribute = (attrName)->
     return typeof(html[attrName]) isnt 'undefined'
 
+# IE patch
+if /MSIE|Trident/.test(navigator.userAgent)
+  properties = innerHTML:
+    set: (data) ->
+      while @lastChild
+        @removeChild @lastChild
+      @insertAdjacentHTML 'afterbegin', data
+      return
+    get: ->
+      @outerHTML.replace /^\s*<[^>]+?>|<[^>]+?>\s*$/g, ''
+  i = 0
+  while o = tags[i]
+    for n of properties
+      Object.defineProperty o, n, properties[n]
+    i++
+
+  if window.HTMLElement
+    tags = [ HTMLElement.prototype ]
+  else
+    tags = [
+      'Unknown'
+      'UList'
+      'Title'
+      'TextArea'
+      'TableSection'
+      'TableRow'
+      'Table'
+      'TableCol'
+      'TableCell'
+      'TableCaption'
+      'Style'
+      'Span'
+      'Select'
+      'Script'
+      'Param'
+      'Paragraph'
+      'Option'
+      'Object'
+      'OList'
+      'Meta'
+      'Marquee'
+      'Map'
+      'Link'
+      'Legend'
+      'Label'
+      'LI'
+      'Input'
+      'Image'
+      'IFrame'
+      'Html'
+      'Heading'
+      'Head'
+      'HR'
+      'FrameSet'
+      'Frame'
+      'Form'
+      'Font'
+      'FieldSet'
+      'Embed'
+      'Div'
+      'DList'
+      'Button'
+      'Body'
+      'Base'
+      'BR'
+      'Area'
+      'Anchor'
+    ]
+    html5tags = [
+      'abbr'
+      'article'
+      'aside'
+      'audio'
+      'canvas'
+      'datalist'
+      'details'
+      'dialog'
+      'eventsource'
+      'figure'
+      'footer'
+      'header'
+      'hgroup'
+      'mark'
+      'menu'
+      'meter'
+      'nav'
+      'output'
+      'progress'
+      'section'
+      'time'
+      'video'
+    ]
+    o = undefined
+    n = undefined
+    i = 0
+    while o = window['HTML' + tags[i] + 'Element']
+      tags[i] = o.prototype
+      i++
+    i = 0
+    while i < html5tags.length
+      tags.push document.createElement(html5tags[i]).constructor.prototype
+      i++
 
 
 # rendering

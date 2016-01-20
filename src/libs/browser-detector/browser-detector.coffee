@@ -120,111 +120,11 @@ if typeof(html.hasAttribute) isnt 'function'
   html.hasAttribute = (attrName)->
     return typeof(html[attrName]) isnt 'undefined'
 
-# IE patch
-if /MSIE|Trident/.test(navigator.userAgent)
-  properties = innerHTML:
-    set: (data) ->
-      while @lastChild
-        @removeChild @lastChild
-      @insertAdjacentHTML 'afterbegin', data
-      return
-    get: ->
-      @outerHTML.replace /^\s*<[^>]+?>|<[^>]+?>\s*$/g, ''
-  i = 0
-  while o = tags[i]
-    for n of properties
-      Object.defineProperty o, n, properties[n]
-    i++
-
-  if window.HTMLElement
-    tags = [ HTMLElement.prototype ]
-  else
-    tags = [
-      'Unknown'
-      'UList'
-      'Title'
-      'TextArea'
-      'TableSection'
-      'TableRow'
-      'Table'
-      'TableCol'
-      'TableCell'
-      'TableCaption'
-      'Style'
-      'Span'
-      'Select'
-      'Script'
-      'Param'
-      'Paragraph'
-      'Option'
-      'Object'
-      'OList'
-      'Meta'
-      'Marquee'
-      'Map'
-      'Link'
-      'Legend'
-      'Label'
-      'LI'
-      'Input'
-      'Image'
-      'IFrame'
-      'Html'
-      'Heading'
-      'Head'
-      'HR'
-      'FrameSet'
-      'Frame'
-      'Form'
-      'Font'
-      'FieldSet'
-      'Embed'
-      'Div'
-      'DList'
-      'Button'
-      'Body'
-      'Base'
-      'BR'
-      'Area'
-      'Anchor'
-    ]
-    html5tags = [
-      'abbr'
-      'article'
-      'aside'
-      'audio'
-      'canvas'
-      'datalist'
-      'details'
-      'dialog'
-      'eventsource'
-      'figure'
-      'footer'
-      'header'
-      'hgroup'
-      'mark'
-      'menu'
-      'meter'
-      'nav'
-      'output'
-      'progress'
-      'section'
-      'time'
-      'video'
-    ]
-    o = undefined
-    n = undefined
-    i = 0
-    while o = window['HTML' + tags[i] + 'Element']
-      tags[i] = o.prototype
-      i++
-    i = 0
-    while i < html5tags.length
-      tags.push document.createElement(html5tags[i]).constructor.prototype
-      i++
 
 
 # rendering
+base_url = 'http://libs.soopro.com/browser-detector'
+
 rendering = ->
   # process test
   if html.hasAttribute('modern-browser-tester')
@@ -258,7 +158,6 @@ rendering = ->
     return
 
   if not is_modern_browser
-    default_assets_src = 'http://libs.soopro.com/browser-detector/'
     assets_src = html.getAttribute('modern-browser')
   
     if typeof(assets_src) is 'string' \
@@ -270,7 +169,7 @@ rendering = ->
       assets_src = ''
   
     if not assets_src or assets_src.toLowerCase() in ['true', '1']
-      assets_src = default_assets_src
+      assets_src = base_url
   
 
     try
@@ -279,8 +178,8 @@ rendering = ->
       else
         assets_path = assets_src
       
-      if assets_path isnt '' and assets_path.substr(-1) isnt '/'
-        assets_path = assets_path+'/'
+      if assets_path and assets_path.substr(-1) is '/'
+        assets_path = assets_path.substr(0, assets_path.length - 1);
     catch e
       assets_path = ''
 
@@ -362,19 +261,23 @@ window.document.ready = (callback, context) ->
   return
 
 # run ----------------------------->
-window.document.ready(rendering)
+window.document.ready ->
+  try
+    rendering()
+  catch
+    window.location.href = base_url + '/default.html'
 
 
 # templates ----------------------->
 
 head_template = ''+
 '<title>Old Browser</title>'+
-'<link href="'+assets_path+'browser-detector.css" rel="stylesheet">'
+'<link href="'+assets_path+'/browser-detector.css" rel="stylesheet">'
 
 body_template = ''+
 '<div id="wrapper">'+
 ' <div id="logo">'+
-'   <img src="'+assets_path+'browser_detector_logo.png" alt="Soopro"/>'+
+'   <img src="'+assets_path+'/browser_detector_logo.png" alt="Soopro"/>'+
 ' </div>'+
 ' <div class="content">'+
 '   <p>'+
@@ -387,25 +290,25 @@ body_template = ''+
 ' <div class="browsers">'+
 '   <div class="browser">'+
 '     <a href="http://www.firefox.com" target="_blank">'+
-'       <img src="'+assets_path+'browser_firefox.png" '+
+'       <img src="'+assets_path+'/browser_firefox.png" '+
 '        alt="Firefox"/>'+
 '     </a>'+
 '   </div>'+
 '   <div class="browser">'+
 '     <a href="http://www.chrome.com" target="_blank">'+
-'       <img src="'+assets_path+'browser_chrome.png" '+
+'       <img src="'+assets_path+'/browser_chrome.png" '+
 '        alt="Chrome"/>'+
 '     </a>'+
 '   </div>'+
 '   <div class="browser">'+
 '     <a href="http://support.apple.com/downloads/#safari" target="_blank">'+
-'       <img src="'+assets_path+'browser_safari.png" '+
+'       <img src="'+assets_path+'/browser_safari.png" '+
 '        alt="Safari"/>'+
 '     </a>'+
 '   </div>'+
 '   <div class="browser">'+
 '     <a href="http://www.opera.com/" target="_blank">'+
-'       <img src="'+assets_path+'browser_opera.png" '+
+'       <img src="'+assets_path+'/browser_opera.png" '+
 '        alt="Opera"/>'+
 '     </a>'+
 '   </div>'+

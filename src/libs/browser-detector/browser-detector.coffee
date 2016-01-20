@@ -1,12 +1,13 @@
 # -------------------------------
 # Browser Detector
-# Version:  0.0.3
 # -------------------------------
 is_exports = typeof exports isnt "undefined" and exports isnt null
 root = if is_exports then exports else this
 
 unless root.sup
   root.sup = {}
+
+version = "0.1.0"
   
 mobile_list = [
   {pattern:/Android/i, name:'Android', alias:'android'}
@@ -151,97 +152,158 @@ if html.hasAttribute('modern-browser-tester')
 if not html.hasAttribute('modern-browser')
   return
 
-if not is_modern_browser
-  default_assets_src = 'http://libs.soopro.com/browser-detector/'
-  assets_src = html.getAttribute('modern-browser')
+# rendering
+rendering = ->
+  if not is_modern_browser
+    default_assets_src = 'http://libs.soopro.com/browser-detector/'
+    assets_src = html.getAttribute('modern-browser')
   
-  if typeof(assets_src) is 'string' \
-  and assets_src.toLowerCase() in ['0', 'false', 'null']
-    return
-  else if assets_src in [false, 0, null, undefined]
-    return
-  else if typeof(assets_src) isnt 'string'
-    assets_src = ''
+    if typeof(assets_src) is 'string' \
+    and assets_src.toLowerCase() in ['0', 'false', 'null']
+      return
+    else if assets_src in [false, 0, null, undefined]
+      return
+    else if typeof(assets_src) isnt 'string'
+      assets_src = ''
   
-  if not assets_src or assets_src.toLowerCase() in ['true', '1']
-    assets_src = default_assets_src
+    if not assets_src or assets_src.toLowerCase() in ['true', '1']
+      assets_src = default_assets_src
   
 
-  try
-    if assets_src in ['.', 'self']
-      assets_path = ''
-    else
-      assets_path = assets_src
+    try
+      if assets_src in ['.', 'self']
+        assets_path = ''
+      else
+        assets_path = assets_src
       
-    if assets_path isnt '' and assets_path.substr(-1) isnt '/'
-      assets_path = assets_path+'/'
-  catch e
-    assets_path = ''
+      if assets_path isnt '' and assets_path.substr(-1) isnt '/'
+        assets_path = assets_path+'/'
+    catch e
+      assets_path = ''
 
-  remove_attr_list = []
-  for attr in html.attributes
-    remove_attr_list.push(attr.name)
-  for attr in remove_attr_list
-    html.removeAttribute(attr)
+    remove_attr_list = []
+    for attr in html.attributes
+      remove_attr_list.push(attr.name)
+    for attr in remove_attr_list
+      html.removeAttribute(attr)
   
-  while html.firstChild
-    html.removeChild(html.firstChild)
+    while html.firstChild
+      html.removeChild(html.firstChild)
   
-  
-  
-  head = document.createElement("HEAD")
-  head_html = ''+
-  '<title>Old Browser</title>'+
-  '<link href="'+assets_path+'browser-detector.css" rel="stylesheet">'
-  
-  head.innerHTML = head_html
-  html.appendChild(head)
+    head = document.createElement("HEAD")
+    head.innerHTML = head_template
+    html.appendChild(head)
+
+    body = document.createElement("BODY")
+    body.innerHTML = body_template
+    html.appendChild(body)
 
 
-  body = document.createElement("BODY")
-  body_html = ''+
+# document ready
+ready = ->
+  if !readyFired
+    # this must be set to true before we start calling callbacks
+    readyFired = true
+    i = 0
+    while i < readyList.length
+      readyList[i].fn.call window, readyList[i].ctx
+      i++
+    # allow any closures held by these functions to free
+    readyList = []
+    rendering()
+  return
 
-  '<div id="wrapper">'+
-  ' <div id="logo">'+
-  '   <img src="'+assets_path+'browser_detector_logo.png" alt="Soopro"/>'+
-  ' </div>'+
-  ' <div class="content">'+
-  '   <p>'+
-  '     Your browser is too old.<br>'+
-  '     We recommend you choose more reliable web browser following:'+
-  '   </p>'+
-  '   <p>您的浏览器老掉牙了，希望您能紧跟时代立刻升级。'+
-  '   推荐您使用这些浏览器：</p>'+
-  ' </div>'+
-  ' <div class="browsers">'+
-  '   <div class="browser">'+
-  '     <a href="http://www.firefox.com" target="_blank">'+
-  '       <img src="'+assets_path+'browser_firefox.png" '+
-  '        alt="Firefox"/>'+
-  '     </a>'+
-  '   </div>'+
-  '   <div class="browser">'+
-  '     <a href="http://www.chrome.com" target="_blank">'+
-  '       <img src="'+assets_path+'browser_chrome.png" '+
-  '        alt="Chrome"/>'+
-  '     </a>'+
-  '   </div>'+
-  '   <div class="browser">'+
-  '     <a href="http://support.apple.com/downloads/#safari" target="_blank">'+
-  '       <img src="'+assets_path+'browser_safari.png" '+
-  '        alt="Safari"/>'+
-  '     </a>'+
-  '   </div>'+
-  '   <div class="browser">'+
-  '     <a href="http://www.opera.com/" target="_blank">'+
-  '       <img src="'+assets_path+'browser_opera.png" '+
-  '        alt="Opera"/>'+
-  '     </a>'+
-  '   </div>'+
-  ' </div>'+
-  ' <div class="copyright">'+
-  '   <small>&copy; Soopro Co.,ltd.</small>'+
-  ' </div>'+
-  '</div>'
-  body.innerHTML = body_html
-  html.appendChild(body)
+readyStateChange = ->
+  if document.readyState == 'complete'
+    ready()
+  return
+
+funcName = 'docReady'
+baseObj = window
+readyList = []
+readyFired = false
+readyEventHandlersInstalled = false
+
+
+window.document.ready = (callback, context) ->
+  # if ready has already fired, then just schedule the callback
+  # to fire asynchronously, but right away
+  if readyFired
+    setTimeout ->
+      callback context
+      return
+    , 1
+    return
+  else
+    # add the function and context to the list
+    readyList.push
+      fn: callback
+      ctx: context
+
+  # if document already ready to go, schedule the ready function to run
+  if document.readyState == 'complete'
+    setTimeout ready, 1
+  else if !readyEventHandlersInstalled
+    # otherwise if we don't have event handlers installed, install them
+    if document.addEventListener
+      # first choice is DOMContentLoaded event
+      document.addEventListener 'DOMContentLoaded', ready, false
+      # backup is window load event
+      window.addEventListener 'load', ready, false
+    else
+      # must be IE
+      document.attachEvent 'onreadystatechange', readyStateChange
+      window.attachEvent 'onload', ready
+    readyEventHandlersInstalled = true
+  return
+
+
+# templates ----------------------->
+
+head_template = ''+
+'<title>Old Browser</title>'+
+'<link href="'+assets_path+'browser-detector.css" rel="stylesheet">'
+
+body_template = ''+
+'<div id="wrapper">'+
+' <div id="logo">'+
+'   <img src="'+assets_path+'browser_detector_logo.png" alt="Soopro"/>'+
+' </div>'+
+' <div class="content">'+
+'   <p>'+
+'     Your browser is too old.<br>'+
+'     We recommend you choose more reliable web browser following:'+
+'   </p>'+
+'   <p>您的浏览器老掉牙了，希望您能紧跟时代立刻升级。'+
+'   推荐您使用这些浏览器：</p>'+
+' </div>'+
+' <div class="browsers">'+
+'   <div class="browser">'+
+'     <a href="http://www.firefox.com" target="_blank">'+
+'       <img src="'+assets_path+'browser_firefox.png" '+
+'        alt="Firefox"/>'+
+'     </a>'+
+'   </div>'+
+'   <div class="browser">'+
+'     <a href="http://www.chrome.com" target="_blank">'+
+'       <img src="'+assets_path+'browser_chrome.png" '+
+'        alt="Chrome"/>'+
+'     </a>'+
+'   </div>'+
+'   <div class="browser">'+
+'     <a href="http://support.apple.com/downloads/#safari" target="_blank">'+
+'       <img src="'+assets_path+'browser_safari.png" '+
+'        alt="Safari"/>'+
+'     </a>'+
+'   </div>'+
+'   <div class="browser">'+
+'     <a href="http://www.opera.com/" target="_blank">'+
+'       <img src="'+assets_path+'browser_opera.png" '+
+'        alt="Opera"/>'+
+'     </a>'+
+'   </div>'+
+' </div>'+
+' <div class="copyright">'+
+'   <small>&copy; Soopro Co.,ltd.</small>'+
+' </div>'+
+'</div>'

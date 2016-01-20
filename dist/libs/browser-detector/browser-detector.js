@@ -244,7 +244,6 @@
   } catch (error) {
     e = error;
     console.log(e);
-    window.location.href = base_url + '/default.html';
   }
 
   head_template = function(assets_path) {

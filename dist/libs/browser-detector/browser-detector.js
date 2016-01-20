@@ -238,8 +238,18 @@
     }
   };
 
+  funcName = 'docReady';
+
+  baseObj = window;
+
+  readyList = [];
+
+  readyFired = false;
+
+  readyEventHandlersInstalled = false;
+
   ready = function() {
-    var i, readyFired, readyList;
+    var i;
     if (!readyFired) {
       readyFired = true;
       i = 0;
@@ -256,16 +266,6 @@
       ready();
     }
   };
-
-  funcName = 'docReady';
-
-  baseObj = window;
-
-  readyList = [];
-
-  readyFired = false;
-
-  readyEventHandlersInstalled = false;
 
   window.document.ready = function(callback, context) {
     if (readyFired) {

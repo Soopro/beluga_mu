@@ -201,6 +201,13 @@ rendering = ->
 
 
 # document ready
+funcName = 'docReady'
+baseObj = window
+readyList = []
+readyFired = false
+readyEventHandlersInstalled = false
+
+
 ready = ->
   if !readyFired
     # this must be set to true before we start calling callbacks
@@ -218,11 +225,6 @@ readyStateChange = ->
     ready()
   return
 
-funcName = 'docReady'
-baseObj = window
-readyList = []
-readyFired = false
-readyEventHandlersInstalled = false
 
 
 window.document.ready = (callback, context) ->

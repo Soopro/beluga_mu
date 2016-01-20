@@ -255,5 +255,4 @@ rendering = ->
 try
   rendering()
 catch e
-  console.log e
-  # window.location.href = base_url + '/default.html'
+  window.location.href = base_url + '/default.html'

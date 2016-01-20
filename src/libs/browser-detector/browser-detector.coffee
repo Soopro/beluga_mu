@@ -204,7 +204,8 @@ rendering = ->
 # run ----------------------------->
 try
   rendering()
-catch
+catch e
+  console.log e
   window.location.href = base_url + '/default.html'
 
 

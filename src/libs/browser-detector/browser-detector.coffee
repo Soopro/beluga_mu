@@ -121,39 +121,40 @@ if typeof(html.hasAttribute) isnt 'function'
     return typeof(html[attrName]) isnt 'undefined'
 
 
-# process test
-if html.hasAttribute('modern-browser-tester')
-
-  for attr in html.attributes
-    html.removeAttribute(attr)
-  
-  while html.firstChild
-    html.removeChild(html.firstChild)
-  
-  head = document.createElement("HEAD")
-  head.innerHTML = '<title>Browser Tester</title>'
-  html.appendChild(head)
-  
-  body = document.createElement("BODY")
-  
-  modern = if browser.is_modern_browser then 'Modern' else 'Old'
-  mobile_name = if browser.mobile then browser.mobile.name else '-'
-  
-  body.innerHTML = ''+
-  '<h1>'+browser.name+' '+browser.ver+' '+mobile_name+' '+modern+'</h1>'+
-  '<p>appName: '+navigator.appName+'</p>'+
-  '<p>appVersion: '+navigator.appVersion+'</p>'+
-  '<small>&lt; '+navigator.userAgent+' &gt;</small>'
-  
-  html.appendChild(body)
-  return
-
-# process failback
-if not html.hasAttribute('modern-browser')
-  return
 
 # rendering
 rendering = ->
+  # process test
+  if html.hasAttribute('modern-browser-tester')
+
+    for attr in html.attributes
+      html.removeAttribute(attr)
+  
+    while html.firstChild
+      html.removeChild(html.firstChild)
+  
+    head = document.createElement("HEAD")
+    head.innerHTML = '<title>Browser Tester</title>'
+    html.appendChild(head)
+  
+    body = document.createElement("BODY")
+  
+    modern = if browser.is_modern_browser then 'Modern' else 'Old'
+    mobile_name = if browser.mobile then browser.mobile.name else '-'
+  
+    body.innerHTML = ''+
+    '<h1>'+browser.name+' '+browser.ver+' '+mobile_name+' '+modern+'</h1>'+
+    '<p>appName: '+navigator.appName+'</p>'+
+    '<p>appVersion: '+navigator.appVersion+'</p>'+
+    '<small>&lt; '+navigator.userAgent+' &gt;</small>'
+  
+    html.appendChild(body)
+    return
+
+  # process failback
+  if not html.hasAttribute('modern-browser')
+    return
+
   if not is_modern_browser
     default_assets_src = 'http://libs.soopro.com/browser-detector/'
     assets_src = html.getAttribute('modern-browser')
@@ -210,7 +211,6 @@ ready = ->
       i++
     # allow any closures held by these functions to free
     readyList = []
-    rendering()
   return
 
 readyStateChange = ->
@@ -256,6 +256,9 @@ window.document.ready = (callback, context) ->
       window.attachEvent 'onload', ready
     readyEventHandlersInstalled = true
   return
+
+# run ----------------------------->
+window.document.ready(rendering)
 
 
 # templates ----------------------->
@@ -307,3 +310,4 @@ body_template = ''+
 '   <small>&copy; Soopro Co.,ltd.</small>'+
 ' </div>'+
 '</div>'
+

@@ -193,11 +193,11 @@ rendering = ->
       html.removeChild(html.firstChild)
   
     head = document.createElement("HEAD")
-    head.innerHTML = head_template
+    head.innerHTML = head_template()
     html.appendChild(head)
 
     body = document.createElement("BODY")
-    body.innerHTML = body_template
+    body.innerHTML = body_template()
     html.appendChild(body)
 
 
@@ -270,51 +270,50 @@ window.document.ready ->
 
 # templates ----------------------->
 
-head_template = ''+
-'<title>Old Browser</title>'+
-'<link href="'+assets_path+'/browser-detector.css" rel="stylesheet">'
+head_template = ->
+  '<title>Old Browser</title>'+
+  '<link href="'+assets_path+'/browser-detector.css" rel="stylesheet">'
 
-body_template = ''+
-'<div id="wrapper">'+
-' <div id="logo">'+
-'   <img src="'+assets_path+'/browser_detector_logo.png" alt="Soopro"/>'+
-' </div>'+
-' <div class="content">'+
-'   <p>'+
-'     Your browser is too old.<br>'+
-'     We recommend you choose more reliable web browser following:'+
-'   </p>'+
-'   <p>您的浏览器老掉牙了，希望您能紧跟时代立刻升级。'+
-'   推荐您使用这些浏览器：</p>'+
-' </div>'+
-' <div class="browsers">'+
-'   <div class="browser">'+
-'     <a href="http://www.firefox.com" target="_blank">'+
-'       <img src="'+assets_path+'/browser_firefox.png" '+
-'        alt="Firefox"/>'+
-'     </a>'+
-'   </div>'+
-'   <div class="browser">'+
-'     <a href="http://www.chrome.com" target="_blank">'+
-'       <img src="'+assets_path+'/browser_chrome.png" '+
-'        alt="Chrome"/>'+
-'     </a>'+
-'   </div>'+
-'   <div class="browser">'+
-'     <a href="http://support.apple.com/downloads/#safari" target="_blank">'+
-'       <img src="'+assets_path+'/browser_safari.png" '+
-'        alt="Safari"/>'+
-'     </a>'+
-'   </div>'+
-'   <div class="browser">'+
-'     <a href="http://www.opera.com/" target="_blank">'+
-'       <img src="'+assets_path+'/browser_opera.png" '+
-'        alt="Opera"/>'+
-'     </a>'+
-'   </div>'+
-' </div>'+
-' <div class="copyright">'+
-'   <small>&copy; Soopro Co.,ltd.</small>'+
-' </div>'+
-'</div>'
-
+body_template = ->
+  '<div id="wrapper">'+
+  ' <div id="logo">'+
+  '   <img src="'+assets_path+'/browser_detector_logo.png" alt="Soopro"/>'+
+  ' </div>'+
+  ' <div class="content">'+
+  '   <p>'+
+  '     Your browser is too old.<br>'+
+  '     We recommend you choose more reliable web browser following:'+
+  '   </p>'+
+  '   <p>您的浏览器老掉牙了，希望您能紧跟时代立刻升级。'+
+  '   推荐您使用这些浏览器：</p>'+
+  ' </div>'+
+  ' <div class="browsers">'+
+  '   <div class="browser">'+
+  '     <a href="http://www.firefox.com" target="_blank">'+
+  '       <img src="'+assets_path+'/browser_firefox.png" '+
+  '        alt="Firefox"/>'+
+  '     </a>'+
+  '   </div>'+
+  '   <div class="browser">'+
+  '     <a href="http://www.chrome.com" target="_blank">'+
+  '       <img src="'+assets_path+'/browser_chrome.png" '+
+  '        alt="Chrome"/>'+
+  '     </a>'+
+  '   </div>'+
+  '   <div class="browser">'+
+  '     <a href="http://support.apple.com/downloads/#safari" target="_blank">'+
+  '       <img src="'+assets_path+'/browser_safari.png" '+
+  '        alt="Safari"/>'+
+  '     </a>'+
+  '   </div>'+
+  '   <div class="browser">'+
+  '     <a href="http://www.opera.com/" target="_blank">'+
+  '       <img src="'+assets_path+'/browser_opera.png" '+
+  '        alt="Opera"/>'+
+  '     </a>'+
+  '   </div>'+
+  ' </div>'+
+  ' <div class="copyright">'+
+  '   <small>&copy; Soopro Co.,ltd.</small>'+
+  ' </div>'+
+  '</div>'

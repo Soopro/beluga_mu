@@ -7,7 +7,7 @@ root = if is_exports then exports else this
 unless root.sup
   root.sup = {}
 
-version = "0.1.0"
+version = "0.1.1"
   
 mobile_list = [
   {pattern:/Android/i, name:'Android', alias:'android'}
@@ -71,13 +71,13 @@ browser = do ->
     name = M[0]
     ver = M[1]
   
-  browser = 
+  _browser = 
     alias: if typeof(name) is 'string' then name.toLowerCase() else null
     name: name
     ver: ver
     mobile: mobile
 
-  return browser
+  return _browser
 
 check_version = (browser)->
   return modern_browsers[browser.alias] > parseInt(browser.ver)

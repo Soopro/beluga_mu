@@ -10,7 +10,7 @@
     root.sup = {};
   }
 
-  version = "0.1.0";
+  version = "0.1.1";
 
   mobile_list = [
     {
@@ -78,7 +78,7 @@
   })();
 
   browser = (function() {
-    var M, name, tem, ua, ver;
+    var M, _browser, name, tem, ua, ver;
     ua = navigator.userAgent;
     tem = void 0;
     M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i);
@@ -113,13 +113,13 @@
       name = M[0];
       ver = M[1];
     }
-    browser = {
+    _browser = {
       alias: typeof name === 'string' ? name.toLowerCase() : null,
       name: name,
       ver: ver,
       mobile: mobile
     };
-    return browser;
+    return _browser;
   })();
 
   check_version = function(browser) {

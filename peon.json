@@ -1,4 +1,10 @@
 {
+  "watch":{
+    "src": "src",
+    "dest": "build",
+    "clean": true,
+    "server": true
+  },
   "release":{
     "render":{
       "cwd": "src",

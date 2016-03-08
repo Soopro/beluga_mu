@@ -7,7 +7,7 @@ root = if is_exports then exports else this
 unless root.sup
   root.sup = {}
 
-version = "0.1.1"
+version = "0.1.2"
   
 mobile_list = [
   {pattern:/Android/i, name:'Android', alias:'android'}
@@ -126,12 +126,12 @@ if typeof(html.hasAttribute) isnt 'function'
 
 head_template = (assets_path)->
   '<title>Old Browser</title>'+
-  '<link href="'+assets_path+'/browser-detector.css" rel="stylesheet">'
+  '<link href="'+assets_path+'browser-detector.css" rel="stylesheet">'
 
 body_template = (assets_path)->
   '<div id="wrapper">'+
   ' <div id="logo">'+
-  '   <img src="'+assets_path+'/browser_detector_logo.png" alt="Soopro"/>'+
+  '   <img src="'+assets_path+'browser_detector_logo.png" alt="Soopro"/>'+
   ' </div>'+
   ' <div class="content">'+
   '   <p>'+
@@ -144,25 +144,25 @@ body_template = (assets_path)->
   ' <div class="browsers">'+
   '   <div class="browser">'+
   '     <a href="http://www.firefox.com" target="_blank">'+
-  '       <img src="'+assets_path+'/browser_firefox.png" '+
+  '       <img src="'+assets_path+'browser_firefox.png" '+
   '        alt="Firefox"/>'+
   '     </a>'+
   '   </div>'+
   '   <div class="browser">'+
   '     <a href="http://www.chrome.com" target="_blank">'+
-  '       <img src="'+assets_path+'/browser_chrome.png" '+
+  '       <img src="'+assets_path+'browser_chrome.png" '+
   '        alt="Chrome"/>'+
   '     </a>'+
   '   </div>'+
   '   <div class="browser">'+
   '     <a href="http://support.apple.com/downloads/#safari" target="_blank">'+
-  '       <img src="'+assets_path+'/browser_safari.png" '+
+  '       <img src="'+assets_path+'browser_safari.png" '+
   '        alt="Safari"/>'+
   '     </a>'+
   '   </div>'+
   '   <div class="browser">'+
   '     <a href="http://www.opera.com/" target="_blank">'+
-  '       <img src="'+assets_path+'/browser_opera.png" '+
+  '       <img src="'+assets_path+'browser_opera.png" '+
   '        alt="Opera"/>'+
   '     </a>'+
   '   </div>'+
@@ -173,7 +173,7 @@ body_template = (assets_path)->
   '</div>'
 
 # rendering
-base_url = 'http://libs.soopro.com/browser-detector'
+detector_url = ''
 
 rendering = ->
   # process test
@@ -208,28 +208,24 @@ rendering = ->
     return
 
   if not is_modern_browser
-    assets_src = html.getAttribute('modern-browser')
-  
-    if typeof(assets_src) is 'string' \
-    and assets_src.toLowerCase() in ['0', 'false', 'null']
+    detector_url = html.getAttribute('modern-browser')
+    
+    negatives = ['0', 'false', 'null', false, 0, null, undefined]
+    if detector_url.toLowerCase() in negatives
       return
-    else if assets_src in [false, 0, null, undefined]
-      return
-    else if typeof(assets_src) isnt 'string'
-      assets_src = ''
+    else if typeof(detector_url) isnt 'string'
+      detector_url = ''
   
-    if not assets_src or assets_src.toLowerCase() in ['true', '1']
-      assets_src = base_url
-  
+    if not detector_url or detector_url.toLowerCase() in ['true', '1']
+      detector_url = ''
+    
+    assets_src = detector_url
 
     try
       if assets_src in ['.', 'self']
         assets_path = ''
       else
         assets_path = assets_src
-      
-      if assets_path and assets_path.substr(-1) is '/'
-        assets_path = assets_path.substr(0, assets_path.length - 1);
     catch e
       assets_path = ''
 
@@ -255,4 +251,4 @@ rendering = ->
 try
   rendering()
 catch e
-  window.location.href = base_url + '/default.html'
+  window.location.href = detector_url + '/default.html'

@@ -8,7 +8,7 @@ unless root.sup
   root.sup = {}
 
 version = "0.1.2"
-  
+
 mobile_list = [
   {pattern:/Android/i, name:'Android', alias:'android'}
   {pattern:/webOS/i, name:'webOS', alias:'webos'}
@@ -17,7 +17,7 @@ mobile_list = [
   {pattern:/iPod/i, name:'iPod', alias:'ipod'}
   {pattern:/BlackBerry/i, name:'BlackBerry', alias:'blackberry'}
   {pattern:/Windows Phone/i, name:'WindowsPhone', alias:'wp'}
-]  
+]
 
 modern_browsers = {
   'chrome': 40,
@@ -27,7 +27,7 @@ modern_browsers = {
   'msie': 10
 }
 
-black_list = 
+black_list =
   android: ['UCBrowser', 'Opera', 'SougouMobile', 'DolphineBrowser',
             'MQQBrowser', 'Baidu']
   ios: ['SougouMobile', 'OS 6_']
@@ -39,39 +39,39 @@ mobile = do ->
   if navigator.userAgent.indexOf('Mobile') > -1
     return {name: '', alias: '' }
   return null
-  
+
 browser = do ->
   ua = navigator.userAgent
   tem = undefined
   M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i)
   if not M
     M = []
-  
+
   name = null
   ver = null
-  
+
   if /trident/i.test(M[1])
     tem = /\brv[ :]+(\d+)/g.exec(ua) or []
     name = "MSIE"
-    ver = (tem[1] or "") 
+    ver = (tem[1] or "")
 
   if M[1] is "Chrome"
     tem = ua.match(/\bOPR\/(\d+)/)
     name = "Opera" if tem?
     ver = tem[1] if tem?
-  
+
   if not name and not ver
     if M[2]
-      M = [ M[1], M[2] ] 
-    else 
+      M = [ M[1], M[2] ]
+    else
       M = [ navigator.appName, navigator.appVersion, "-?" ]
-    
+
     M.splice 1, 1, tem[1]  if (tem = ua.match(/version\/(\d+)/i))?
-    
+
     name = M[0]
     ver = M[1]
-  
-  _browser = 
+
+  _browser =
     alias: if typeof(name) is 'string' then name.toLowerCase() else null
     name: name
     ver: ver
@@ -96,7 +96,7 @@ if browser.mobile
   # ios 6
   if browser.alias is 'safari' and parseInt(browser.ver) < 7
     is_modern_browser = false
-  
+
   # others
   _black_list = black_list[browser.mobile.alias] or []
   for blackbrowser in _black_list
@@ -173,53 +173,48 @@ body_template = (assets_path)->
   '</div>'
 
 # rendering
-detector_url = ''
-
 rendering = ->
   # process test
   if html.hasAttribute('modern-browser-tester')
 
     for attr in html.attributes
       html.removeAttribute(attr)
-  
+
     while html.firstChild
       html.removeChild(html.firstChild)
-  
+
     head = document.createElement("HEAD")
     head.innerHTML = '<title>Browser Tester</title>'
     html.appendChild(head)
-  
+
     body = document.createElement("BODY")
-  
+
     modern = if browser.is_modern_browser then 'Modern' else 'Old'
     mobile_name = if browser.mobile then browser.mobile.name else '-'
-  
+
     body.innerHTML = ''+
     '<h1>'+browser.name+' '+browser.ver+' '+mobile_name+' '+modern+'</h1>'+
     '<p>appName: '+navigator.appName+'</p>'+
     '<p>appVersion: '+navigator.appVersion+'</p>'+
     '<small>&lt; '+navigator.userAgent+' &gt;</small>'
-  
+
     html.appendChild(body)
     return
 
-  # process failback
+  # process pass
   if not html.hasAttribute('modern-browser')
     return
 
+  # process not modern
   if not is_modern_browser
-    detector_url = html.getAttribute('modern-browser')
-    
-    negatives = ['0', 'false', 'null', false, 0, null, undefined]
-    if detector_url.toLowerCase() in negatives
+    assets_src = html.getAttribute('modern-browser')
+
+    if assets_src in ['0', 'false', 'null', false, 0, null, undefined]
       return
-    else if typeof(detector_url) isnt 'string'
-      detector_url = ''
-  
-    if not detector_url or detector_url.toLowerCase() in ['true', '1']
-      detector_url = ''
-    
-    assets_src = detector_url
+    else if typeof(assets_src) isnt 'string'
+      assets_src = ''
+    else if assets_src in ['true', '1']
+      assets_src = ''
 
     try
       if assets_src in ['.', 'self']
@@ -234,10 +229,10 @@ rendering = ->
       remove_attr_list.push(attr.name)
     for attr in remove_attr_list
       html.removeAttribute(attr)
-  
+
     while html.firstChild
       html.removeChild(html.firstChild)
-  
+
     head = document.createElement("HEAD")
     head.innerHTML = head_template(assets_path)
     html.appendChild(head)
@@ -246,9 +241,20 @@ rendering = ->
     body.innerHTML = body_template(assets_path)
     html.appendChild(body)
 
+    return
+
 
 # run ----------------------------->
 try
   rendering()
 catch e
+  detector_url = html.getAttribute('modern-browser')
+  if not detector_url \
+  or typeof detector_url isnt 'string' \
+  or detector_url.indexOf('http') != 0
+    detector_url = ''
+
+  if detector_url.slice(-1) == '/'
+    detector_url = detector_url.slice(0, -1)
+
   window.location.href = detector_url + '/default.html'
